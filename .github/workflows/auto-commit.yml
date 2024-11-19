@@ -32,9 +32,12 @@ jobs:
 
       # Commit and push the updated README.md
       - name: Commit and Push Changes
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git config --global user.email "2251120143@ut.edu.vn"
           git config --global user.name "vndnw"
+          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/vndnw/bitcoin.git
           git add README.md
           git commit -m "Update Bitcoin Price on $(date)" || echo "No changes to commit"
-          git push
+          git push origin main
