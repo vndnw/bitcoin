@@ -10,11 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
  steps:
-      # 1. Checkout code từ repository
-      - name: Checkout repository
+      - name: Bitcoin Price
         uses: actions/checkout@v3
 
-      # 2. Lấy giá Bitcoin từ API
       - name: Fetch Bitcoin price
         id: get_price
         run: |
@@ -23,8 +21,6 @@ jobs:
           echo "::set-output name=price::$price"
         env:
           LANG: en_US.UTF-8
-
-      # 3. Cập nhật file README.md
       - name: Update README.md
         run: |
           echo "Updating README.md with Bitcoin price..."
