@@ -20,9 +20,11 @@ jobs:
         run: |
           response=$(curl -s https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd)
           price=$(echo $response | jq -r '.bitcoin.usd')
-          echo "::set-output name=price::$price"
+          echo "price=$price" >> $GITHUB_ENV
         env:
           LANG: en_US.UTF-8
+      - name: Debug Price Output
+        run: echo "Bitcoin Price: ${{ env.price }}"
 
       # Update README.md with the fetched price
       - name: Update README.md
