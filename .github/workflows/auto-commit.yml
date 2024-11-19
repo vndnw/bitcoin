@@ -10,27 +10,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repository
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      # Fetch Bitcoin price
       - name: Fetch Bitcoin price
         id: get_price
         run: |
           response=$(curl -s https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd)
           price=$(echo $response | jq -r '.bitcoin.usd')
           echo "::set-output name=price::$price"
-        env:
-          LANG: en_US.UTF-8
 
-      # Update README.md with the fetched price
+      - name: Debug Price Output
+        run: echo "Bitcoin Price: ${{ steps.get_price.outputs.price }}"
+
       - name: Update README.md
         run: |
           echo "Updating README.md with Bitcoin price..."
           sed -i "s/Bitcoin Price:.*$/Bitcoin Price: \$${{ steps.get_price.outputs.price }}/" README.md
 
-      # Commit and push the updated README.md
       - name: Commit and Push Changes
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
