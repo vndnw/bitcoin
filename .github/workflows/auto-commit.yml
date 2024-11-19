@@ -18,7 +18,7 @@ jobs:
         run: |
           response=$(curl -s https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd)
           price=$(echo $response | jq -r '.bitcoin.usd')
-          echo "price=$price" >> $GITHUB_ENV  # Lưu giá trị vào môi trường để sử dụng trong các bước sau
+          echo "price=$price" >> $GITHUB_ENV
 
       - name: Debug Price Output
         run: echo "Bitcoin Price: ${{ env.price }}"
