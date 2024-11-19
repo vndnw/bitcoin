@@ -9,17 +9,27 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "20"
+ steps:
+      # 1. Checkout code từ repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: npm ci
+      # 2. Lấy giá Bitcoin từ API
+      - name: Fetch Bitcoin price
+        id: get_price
+        run: |
+          response=$(curl -s https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd)
+          price=$(echo $response | jq -r '.bitcoin.usd')
+          echo "::set-output name=price::$price"
+        env:
+          LANG: en_US.UTF-8
 
-      - name: Bitcoin Price
-        run: node index.js
+      # 3. Cập nhật file README.md
+      - name: Update README.md
+        run: |
+          echo "Updating README.md with Bitcoin price..."
+          sed -i "s/Bitcoin Price:.*$/Bitcoin Price: \$${{ steps.get_price.outputs.price }}/" README.md
+
       - name: Update README.md
         run: |
           git config --global user.email "2251120143@ut.edu.vn"
