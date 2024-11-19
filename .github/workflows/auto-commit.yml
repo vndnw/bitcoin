@@ -20,7 +20,7 @@ jobs:
         run: |
           response=$(curl -s https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd)
           price=$(echo $response | jq -r '.bitcoin.usd')
-          echo "price=$price" >> $GITHUB_ENV
+          echo "Fetched Bitcoin Price: $price"
         env:
           LANG: en_US.UTF-8
 
