@@ -9,10 +9,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
- steps:
-      - name: Bitcoin Price
+    steps:
+      # Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Fetch Bitcoin price
       - name: Fetch Bitcoin price
         id: get_price
         run: |
@@ -21,15 +23,18 @@ jobs:
           echo "::set-output name=price::$price"
         env:
           LANG: en_US.UTF-8
+
+      # Update README.md with the fetched price
       - name: Update README.md
         run: |
           echo "Updating README.md with Bitcoin price..."
           sed -i "s/Bitcoin Price:.*$/Bitcoin Price: \$${{ steps.get_price.outputs.price }}/" README.md
 
-      - name: Update README.md
+      # Commit and push the updated README.md
+      - name: Commit and Push Changes
         run: |
           git config --global user.email "2251120143@ut.edu.vn"
           git config --global user.name "vndnw"
-          git add .
+          git add README.md
           git commit -m "Update Bitcoin Price on $(date)" || echo "No changes to commit"
           git push
