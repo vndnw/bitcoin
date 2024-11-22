@@ -12,20 +12,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Fetch Bitcoin price
-      - name: Fetch Bitcoin price
+      # Read Bitcoin price from the pre-fetched JSON file
+      - name: Read Bitcoin price from file
         id: get_price
         run: |
-          response=$(curl -s https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd)
-          price=$(echo "$response" | jq -r '.bitcoin.usd')
-          if [[ "$price" == "null" || -z "$price" ]]; then
-            echo "Failed to fetch Bitcoin price. API response: $response"
-            exit 1
-          fi
+          price=$(jq -r '.bitcoin.usd' prices.json)
           echo "Fetched Bitcoin Price: $price"
           echo "price=$price" >> $GITHUB_ENV
-        env:
-          LANG: en_US.UTF-8
 
       # Update README.md with the fetched price
       - name: Update README.md
