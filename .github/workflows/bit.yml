@@ -1,7 +1,0 @@
-# Fetch Bitcoin price and save to a JSON file
-curl -s https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd > prices.json
-
-# Commit and push the prices.json file
-git add prices.json
-git commit -m "Update Bitcoin prices"
-git push

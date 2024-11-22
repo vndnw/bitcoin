@@ -1,33 +1,35 @@
+name: Update Bitcoin Price in README
+
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Manual trigger
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 0 * * *" # Daily at midnight
 
 jobs:
-  build:
+  update-price:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repository
+      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Read Bitcoin price from the pre-fetched JSON file
-      - name: Read Bitcoin price from file
-        id: get_price
-        run: |
-          price=$(jq -r '.bitcoin.usd' prices.json)
-          echo "Fetched Bitcoin Price: $price"
-          echo "price=$price" >> $GITHUB_ENV
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
 
-      # Update README.md with the fetched price
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Run the script to update README.md
       - name: Update README.md
-        run: |
-          echo "Updating README.md with Bitcoin price..."
-          sed -i "s/Bitcoin Price:.*$/Bitcoin Price: \$${{ env.price }}/" README.md
+        run: npm start
 
-      # Commit and push the updated README.md
-      - name: Commit and Push Changes
+      # Step 5: Commit and push changes
+      - name: Commit and push changes
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |

@@ -1,0 +1,15 @@
+{
+    "name": "bitcoin-price-fetcher",
+    "version": "1.0.0",
+    "description": "Fetches the current Bitcoin price using CoinGecko API",
+    "main": "main.js",
+    "type": "module",
+    
+    "scripts": {
+      "start": "node main.js"
+    },
+    "dependencies": {
+      "node-fetch": "^3.3.1"
+    }
+  }
+  
