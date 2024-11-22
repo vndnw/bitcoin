@@ -18,8 +18,12 @@ jobs:
         run: |
           response=$(curl -s https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd)
           price=$(echo "$response" | jq -r '.bitcoin.usd')
+          if [[ "$price" == "null" || -z "$price" ]]; then
+            echo "Failed to fetch Bitcoin price. API response: $response"
+            exit 1
+          fi
           echo "Fetched Bitcoin Price: $price"
-          echo "::set-output name=price::$price"
+          echo "price=$price" >> $GITHUB_ENV
         env:
           LANG: en_US.UTF-8
 
@@ -27,7 +31,7 @@ jobs:
       - name: Update README.md
         run: |
           echo "Updating README.md with Bitcoin price..."
-          sed -i "s/Bitcoin Price:.*$/Bitcoin Price: \$${{ steps.get_price.outputs.price }}/" README.md
+          sed -i "s/Bitcoin Price:.*$/Bitcoin Price: \$${{ env.price }}/" README.md
 
       # Commit and push the updated README.md
       - name: Commit and Push Changes
