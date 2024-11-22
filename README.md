@@ -1,1 +1,1 @@
-Bitcoin Price: $
+Bitcoin Price: $null
