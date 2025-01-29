@@ -2,4 +2,4 @@
 
 This project fetches the latest Bitcoin price daily.
 
-**Bitcoin Price:** $101836
+**Bitcoin Price:** $101752
